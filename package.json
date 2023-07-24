@@ -1,6 +1,6 @@
 {
-  "name": "teste-infra",
-  "version": "1.0.0",
+  "name": "aval-infra",
+  "version": "1.1.0",
   "description": "",
   "main": "index.js",
   "scripts": {

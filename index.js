@@ -14,7 +14,7 @@ const client = new MongoClient(uri, {
 
 let database;
 client.connect().then(() => {
-    database = client.db('testeinfra');
+    database = client.db('aval_devops');
     console.log('connected');
 }).catch((e) => {
     console.error('error: ', e);
@@ -22,7 +22,7 @@ client.connect().then(() => {
 
 app.get('/', async (req, res) => {
     if (database) {
-        const collection = database.collection('tests');
+        const collection = database.collection('meus_dados');
         const tests =  await collection.find();
         const allValues = await tests.toArray();
         res.status(200).send(allValues)
@@ -33,7 +33,7 @@ app.get('/', async (req, res) => {
 
 app.post('/', async (req, res) => {
     if (database && req.body) {
-        const collection = database.collection('tests');
+        const collection = database.collection('meus_dados');
         const result = await collection.insertOne(req.body);
         res.status(200).send(result)
     } else {

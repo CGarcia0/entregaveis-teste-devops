@@ -41,6 +41,6 @@ Criar objetos (cria no banco de dados o body enviado)
 ```
 curl --header "Content-Type: application/json" \
   --request POST \
-  --data '{"teste":"teste1"}' \
+  --data '{"campoData":"campoValor"}' \
   http://localhost:3000
   ```
