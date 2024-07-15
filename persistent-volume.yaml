@@ -1,5 +1,8 @@
+<<<<<<< HEAD
 #Volumes Persistentes:
 # persistent-volume.yaml
+=======
+>>>>>>> c3b670c (Arquivos aplicacao)
 apiVersion: v1
 kind: PersistentVolume
 metadata:
@@ -24,4 +27,8 @@ spec:
     - ReadWriteOnce
   resources:
     requests:
+<<<<<<< HEAD
       storage: 10Gi
+=======
+      storage: 10Gi
+>>>>>>> c3b670c (Arquivos aplicacao)

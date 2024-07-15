@@ -1,5 +1,8 @@
+<<<<<<< HEAD
 #Configuração de Ingress:
 # ingress.yaml
+=======
+>>>>>>> c3b670c (Arquivos aplicacao)
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -18,4 +21,8 @@ spec:
           service:
             name: avaliacao-infra-app
             port:
+<<<<<<< HEAD
               number: 80
+=======
+              number: 80
+>>>>>>> c3b670c (Arquivos aplicacao)

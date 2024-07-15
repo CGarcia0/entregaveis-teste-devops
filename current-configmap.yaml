@@ -1,0 +1,8 @@
+apiVersion: v1
+data:
+  APP_ENV: production
+  MONGO_URL: mongodb://admin:Shitemehackers7@mongo:27017/aval_devops?authSource=admin
+kind: ConfigMap
+metadata:
+  name: app-config
+  namespace: default
