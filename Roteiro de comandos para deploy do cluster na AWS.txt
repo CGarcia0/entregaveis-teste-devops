@@ -1,0 +1,64 @@
+Scripts e Arquivos Utilizados
+resumo dos arquivos e comandos usados:
+
+Terraform:
+Pasta tf-provisionamento-cluster-softdesign:
+
+terraform/main.tf: Contém a configuração para criar a infraestrutura do EKS.
+terraform/variables.tf: Define as variáveis usadas no Terraform.
+terraform/outputs.tf: Define as saídas do Terraform.
+
+Kubernetes Manifests:
+
+current-configmap.yaml: variáveis de ambiente para a aplicação.
+secret.yaml: segredos usados pela aplicação.
+persistent-volume.yaml: volume persistente e a claim.
+mongo-deployment.yaml: deployment do MongoDB.
+mongo-service.yaml:  serviço do MongoDB.
+app-deployment.yaml: deployment da aplicação.
+app-service.yaml: serviço da aplicação.
+ingress.yaml: Ingress para a aplicação.
+
+
+
+Roteiro:
+
+terraform init
+
+terraform plan
+terraform apply -auto-approve
+
+
+Configuração do Kubectl para Acessar o Cluster EKS:
+aws eks --region us-east-1 update-kubeconfig --name avaliacao-infra-cluster
+
+
+Persistent Volume e Persistent Volume Claim:
+
+kubectl apply -f current-configmap.yaml
+kubectl apply -f secret.yaml
+
+
+Deployment e Service para o MongoDB:
+kubectl apply -f mongo-deployment.yaml
+kubectl apply -f mongo-service.yaml
+
+
+Deployment e Service para a Aplicação:
+kubectl apply -f app-deployment.yaml
+kubectl apply -f app-service.yaml
+
+
+Ingress Controller e Regras de Ingress:
+kubectl apply -f ingress.yaml
+
+
+Verificar os Pods e Serviços:
+kubectl get pods
+kubectl get services
+
+kubectl get ingress
+
+
+Acessar a aplicação:
+http://chris-teste-infra.site
