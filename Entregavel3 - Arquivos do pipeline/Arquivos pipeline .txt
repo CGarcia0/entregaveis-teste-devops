@@ -1,0 +1,8 @@
+Este é o link do IP publico para acessar o Jenkins e verificar os deploys referentes ao projeto:
+http://54.221.87.132:8080/
+
+
+Este é o link do meu domínio(que foi comprado) que hospeda a aplicação: http://chris-teste-infra.site/
+
+
+Este é o link do repositorio github que guarda os arquivos a serem utilizados pela pipeline para realizar o deploy dos yamls da aplicação, que ao serem alterados, a pipeline é acionada automaticamente: https://github.com/CGarcia0/pipeline-jenkins-avaliacao-infra
