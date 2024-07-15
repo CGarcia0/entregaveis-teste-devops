@@ -1,0 +1,106 @@
+Criar e Configurar a Instância EC2 que sera usada pelo Jenkins:
+resource "aws_instance" "jenkins" {
+  ami           = "ami-0dc2d3e4c0f9ebd18" # Amazon Linux 2 AMI
+  instance_type = "t2.medium"
+  key_name      = "your-key-pair"
+
+  user_data = <<-EOF
+            #!/bin/bash
+            sudo yum update -y
+            sudo amazon-linux-extras install java-openjdk11 -y
+            sudo wget -O /etc/yum.repos.d/jenkins.repo http://pkg.jenkins-ci.org/redhat/jenkins.repo
+            sudo rpm --import https://pkg.jenkins.io/redhat/jenkins.io.key
+            sudo yum install jenkins -y
+            sudo systemctl start jenkins
+            sudo systemctl enable jenkins
+            sudo yum install git -y
+            sudo yum install docker -y
+            sudo systemctl start docker
+            sudo systemctl enable docker
+            sudo usermod -aG docker ec2-user
+            sudo usermod -aG docker jenkins
+            sudo systemctl restart jenkins
+            sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+            sudo chmod +x /usr/local/bin/docker-compose
+            sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
+            EOF
+
+  tags = {
+    Name = "Jenkins_instance"
+  }
+}
+
+Conectar a instancia:
+ssh -i "nat-instance-key.pem" ec2-user@ec2-54-221-87-132.compute-1.amazonaws.com
+
+
+Conectar no ip do Jenkins:
+http://54.221.87.132:8080/
+
+
+
+Usar a senha inicial do Jenkins:
+
+sudo cat /var/lib/jenkins/secrets/initialAdminPassword
+
+
+Instalar plugins do Kubernetes, Java, e criar o usuário admin.
+
+Configurar credenciais:
+
+Adicionar as credenciais do Docker Registry:
+ID: docker-registry-credentials
+
+
+Adicionar credenciais do Kubernetes:
+ID: kube-config
+
+
+Configurar o Pipeline no Jenkins
+Criar um novo item no Jenkins:
+
+Nome: pipeline-jenkins-avaliacao-infra
+Tipo: Pipeline
+Configurar o pipeline:
+
+Pipeline > Definition, selecione Pipeline script from SCM.
+SCM: Git
+URL do repositório: https://github.com/CGarcia0/pipeline-jenkins-avaliacao-infra
+Branch: */main
+Pipeline Script (Jenkinsfile):
+pipeline {
+    agent any
+
+    environment {
+        REGISTRY = 'index.docker.io'
+        REGISTRY_CREDENTIALS = 'docker-registry-credentials' // Jenkins credential ID for Docker registry
+        KUBE_CONFIG = credentials('kube-config') // Jenkins credential ID for kubeconfig
+        IMAGE_NAME = 'chrisgarcia0/avaliacao-infra-app'
+        IMAGE_TAG = 'latest'
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                script {
+                    echo "Iniciando Checkout do código-fonte"
+                    checkout scm
+                    echo "Checkout concluído com sucesso"
+                }
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    echo "Iniciando build da imagem Docker"
+                    def dockerImage = docker.build("${IMAGE_NAME}:${IMAGE_TAG}")
+                    echo "Imagem Docker construída com sucesso: ${dockerImage.imageName()}"
+                }
+            }
+        }
+
+        stage('Push Docker Image') {
+            steps {
+                script {
+                    echo
